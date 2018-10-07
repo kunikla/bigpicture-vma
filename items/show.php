@@ -77,7 +77,7 @@ echo head(array('title' => $title, 'bodyclass' => 'items show' .  (($hasImages) 
                                " - " .
                                $nonImage->mime_type; ?>
                 </div>
-                <?php echo file_markup($nonImage, array(), NULL); ?>
+                <?php echo file_markup($nonImage, array("preload"=>"none"), NULL); ?>
             <?php /* Use older Omeka Theming Functions for everything else */ ?>
             <?php else: ?>
                 <div class="element-text"><a href="<?php echo file_display_url($nonImage, 'original'); ?>"><?php echo metadata($nonImage, 'display_title'); ?> - <?php echo $nonImage->mime_type; ?></a></div>
