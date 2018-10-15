@@ -50,24 +50,32 @@ echo head(array('title' => $title, 'bodyclass' => 'items show' .  (($hasImages) 
 
         <h1><?php echo metadata('item', 'display_title'); ?></h1>
 
-        <!-- The following allows the user to select an audio file. -->
+        <!-- The following allows the user to select an audio file, if there is more than one. -->
         <?php if (count($audioFiles) > 0): ?>
             <div id="audio-media" class="element">
+                <?php if (count($audioFiles) == 1): ?>
+                <h3><?php echo __("Recording"); ?></h3>
+                <?php $audioFile = $audioFiles[0]; ?>
+                <?php echo metadata($audioFile, 'display_title'); ?>
+                <?php echo file_markup($audioFile, array("preload"=>"auto"), NULL); ?>
+                <?php else: ?>
                 <h3><?php echo __("Recordings"); ?></h3>
                 <?php $selected = (!isset($_POST['track']) || $_POST['track'] == "") ? 1 : (int)$_POST['track']; ?>
                 <form action="" method="post">
                     <select id="select-audio" name="track">
-                        <?php for ($i = 1, $len = sizeof($audioFiles)+1; $i < $len; $i++) : ?>
+                        <?php $i = 1; ?>
+                        <?php foreach ($audioFiles as $audioFile) : ?>
                         <option value="<?php echo $i; ?>"<?php echo ($i == $selected) ? " selected" : ""; ?>>
-                            <?php echo metadata($audioFiles[$i-1], 'display_title'); ?>
+                            <?php echo metadata($audioFile, 'display_title'); $i++; ?>
                         </option>
-                        <?php endfor; ?>
-                    </select>
-                    &nbsp;<br />
+                        <?php endforeach; ?>
+                    </select><br /><br />
+                    <?php echo file_markup($audioFiles[$selected-1], array("preload"=>"auto"), NULL); ?>
+                    <br />
                     <input type="submit" value="<?php echo __("Select recording"); ?>">
-                </form>
-                &nbsp;<br />
-                <?php echo file_markup($audioFiles[$selected-1], array("preload"=>"auto"), NULL); ?>
+                </form><br />
+                <?php endif; ?>
+
             </div>
         <?php endif; ?>
 
